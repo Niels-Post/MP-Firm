@@ -5,7 +5,8 @@
 #include <pmsv/PMSVRobot.hpp>
 
 
-PMSVRobot::PMSVRobot(PMSVSettings &settings): movementController(), communicationController(settings, movementController),  settings(settings){
+PMSVRobot::PMSVRobot(const PMSVSettings &settings)
+        : movementController(settings), communicationController(settings, movementController), settings(settings) {
 }
 
 void PMSVRobot::update() {

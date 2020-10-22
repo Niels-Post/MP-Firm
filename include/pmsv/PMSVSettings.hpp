@@ -2,6 +2,19 @@
 
 #include <RF24.h>
 
+struct StepperSettings {
+    uint8_t pin_enable;
+    uint8_t pin_step;
+    uint8_t pin_dir;
+    uint8_t steps_per_mm;
+
+    StepperSettings(uint8_t pinEnable, uint8_t pinStep, uint8_t pinDir, uint8_t stepsPerMm) : pin_enable(pinEnable),
+                                                                                              pin_step(pinStep),
+                                                                                              pin_dir(pinDir),
+                                                                                              steps_per_mm(
+                                                                                                      stepsPerMm) {}
+};
+
 class PMSVSettings {
 
 public:
@@ -29,11 +42,14 @@ public:
     uint8_t nrf_pin_ce;
     uint8_t nrf_pin_csn;
 
+    StepperSettings leftMotor;
+    StepperSettings rightMotor;
+
 
     PMSVSettings(uint16_t stepsPerCm, uint16_t stepsPerDegree, bool leftMotorFwd, bool rightMotorFwd, uint16_t minSpeed,
                  uint16_t maxSpeed, rf24_pa_dbm_e nrfPalevel, uint8_t nrfChannel, uint64_t nrfReadingpipe,
                  uint64_t nrfWritingpipe, bool nrfEnableDynamicpayloads, size_t nrfPacketSize, bool nrfEnableAutoack,
-                 uint8_t nrfPinCe, uint8_t nrfPinCsn)
+                 uint8_t nrfPinCe, uint8_t nrfPinCsn, StepperSettings leftMotor, StepperSettings rightMotor)
             : steps_per_cm(stepsPerCm),
               steps_per_degree(
                       stepsPerDegree),
@@ -53,7 +69,7 @@ public:
                       nrfPacketSize),
               nrf_enable_autoack(
                       nrfEnableAutoack),
-              nrf_pin_ce(nrfPinCe), nrf_pin_csn(nrfPinCsn) {}
+              nrf_pin_ce(nrfPinCe), nrf_pin_csn(nrfPinCsn), leftMotor(leftMotor), rightMotor(rightMotor) {}
 
 };
 

@@ -9,12 +9,12 @@
 #include <communication/command/Command.hpp>
 
 ReturnCommand ActionCommandHandler::handle(const Command &cmd) {
-    switch(static_cast<ActionCommand>(cmd.command_id)){
+    switch (static_cast<ActionCommand>(cmd.command_id)) {
         case ActionCommand::CANCEL_MOVEMENT:
             movementController.halt();
             break;
         case ActionCommand::START_MOVE_STEPS: {
-            if(cmd.parameter_length > 2) {
+            if (cmd.parameter_length > 2) {
                 movementController.setDirection(cmd.parameters[2]);
             }
 
@@ -22,7 +22,7 @@ ReturnCommand ActionCommandHandler::handle(const Command &cmd) {
             break;
         }
         case ActionCommand::START_MOVE_CM: {
-            if(cmd.parameter_length > 2) {
+            if (cmd.parameter_length > 2) {
                 movementController.setDirection(cmd.parameters[2]);
             }
 

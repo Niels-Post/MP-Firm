@@ -10,7 +10,8 @@
 
 CommunicationController::CommunicationController(const PMSVSettings &settings, MovementController &movementController)
         : nrfRadio(settings.nrf_pin_ce,
-                   settings.nrf_pin_csn), generalCommandHandler(), actionCommandHandler(movementController), measurementCommandHandler(){
+                   settings.nrf_pin_csn), generalCommandHandler(), actionCommandHandler(movementController),
+          measurementCommandHandler() {
     nrfRadio.begin();
     nrfRadio.setPALevel(settings.nrf_palevel);
 
@@ -37,48 +38,48 @@ CommunicationController::CommunicationController(const PMSVSettings &settings, M
 
 void CommunicationController::update() {
     nrfRadio.startListening();
-    if (nrfRadio.available()) {
-        parseNextCommand();
-    }
+    parseNextCommand();
 
-    if (!commandQueue.empty()) {
-        handleCommand(commandQueue.front());
-        commandQueue.pop();
-    }
+    handleQueuedCommand();
 
 }
 
 void CommunicationController::parseNextCommand() {
-    auto size = nrfRadio.getDynamicPayloadSize();
-    uint8_t data[size];
-    nrfRadio.read(data, size);
+    if (nrfRadio.available()) {
+        auto    size = nrfRadio.getDynamicPayloadSize();
+        uint8_t data[size];
+        nrfRadio.read(data, size);
 
-    if (Command::validate(data, size)) {
-        commandQueue.push(Command::parse(data, size));
-        nrfRadio.stopListening();
-    } else {
-        Serial.println("Invalid command received");
+        if (Command::validate(data, size)) {
+            commandQueue.push(Command::parse(data, size));
+            nrfRadio.stopListening();
+        } else {
+            Serial.println("Invalid command received");
+        }
     }
 }
 
-void CommunicationController::handleCommand(const Command &command) {
-    switch (static_cast<CommandCategory>(command.category_id)) {
-        case CommandCategory::GENERAL:
-            sendReturnCommand(generalCommandHandler.handle(command));
-            break;
-        case CommandCategory::ACTION:
-            sendReturnCommand(actionCommandHandler.handle(command));
-            break;
-        case CommandCategory::MOVEMENT:
-            sendReturnCommand(measurementCommandHandler.handle(command));
-            break;
+void CommunicationController::handleQueuedCommand() {
+    if (!commandQueue.empty()) {
+        const auto &command = commandQueue.front();
+        switch (static_cast<CommandCategory>(command.category_id)) {
+            case CommandCategory::GENERAL:
+                sendReturnCommand(generalCommandHandler.handle(command));
+                break;
+            case CommandCategory::ACTION:
+                sendReturnCommand(actionCommandHandler.handle(command));
+                break;
+            case CommandCategory::MEASUREMENT:
+                sendReturnCommand(measurementCommandHandler.handle(command));
+                break;
+        }
+        commandQueue.pop();
     }
 }
 
-void CommunicationController::sendReturnCommand(const ReturnCommand &command) {
+void CommunicationController::sendReturnCommand(const ReturnCommand &returnCommand) {
     nrfRadio.stopListening();
-    if(!nrfRadio.write(&command, 6) )
-    {
+    if (!nrfRadio.write(&returnCommand, 6)) {
         Serial.println("Sending return failed");
     }
 }

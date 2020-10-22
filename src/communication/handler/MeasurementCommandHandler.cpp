@@ -8,5 +8,5 @@
 #include <communication/command/Command.hpp>
 
 ReturnCommand MeasurementCommandHandler::handle(const Command &cmd) {
-    return {0,ReturnCode::BAD_PARAMETERS, nullptr};
+    return {0, ReturnCode::BAD_PARAMETERS, nullptr};
 }

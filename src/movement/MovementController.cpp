@@ -1,8 +1,9 @@
 #include <movement/MovementController.hpp>
 
-#include <movement/MotorController.hpp>
+#include <movement/MotorBoundary.hpp>
 
 #include <Arduino.h>
+#include <pmsv/PMSVSettings.hpp>
 
 ReturnCode MovementController::setSpeed(uint16_t speed) {
     Serial.print("Speed set to: ");
@@ -42,5 +43,15 @@ ReturnCode MovementController::halt() {
 }
 
 void MovementController::update() {
-
+    leftMotor.update();
+    rightMotor.update();
 }
+
+MovementController::MovementController(const PMSVSettings &pmsvSettings) : leftMotor(pmsvSettings.leftMotor.pin_enable,
+                                                                                     pmsvSettings.leftMotor.pin_step,
+                                                                                     pmsvSettings.leftMotor.pin_dir,
+                                                                                     pmsvSettings.leftMotor.steps_per_mm),
+                                                                           rightMotor(pmsvSettings.rightMotor.pin_enable,
+                                                                                     pmsvSettings.rightMotor.pin_step,
+                                                                                     pmsvSettings.rightMotor.pin_dir,
+                                                                                     pmsvSettings.rightMotor.steps_per_mm){}

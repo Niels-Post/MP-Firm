@@ -7,11 +7,11 @@
 class PMSVRobot {
     MovementController      movementController;
     CommunicationController communicationController;
-    PMSVSettings            settings;
+    const PMSVSettings      &settings;
 
 
 public:
-    PMSVRobot(PMSVSettings &settings);
+    PMSVRobot(const PMSVSettings &settings);
 
     void update();
 };
