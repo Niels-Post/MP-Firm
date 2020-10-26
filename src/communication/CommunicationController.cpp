@@ -11,7 +11,7 @@
 CommunicationController::CommunicationController(const PMSVSettings &settings, MovementController &movementController)
         : nrfRadio(settings.nrf_pin_ce,
                    settings.nrf_pin_csn), generalCommandHandler(), actionCommandHandler(movementController),
-          measurementCommandHandler() {
+          measurementCommandHandler(), commandQueue() {
     nrfRadio.begin();
     nrfRadio.setPALevel(settings.nrf_palevel);
 
@@ -39,7 +39,6 @@ CommunicationController::CommunicationController(const PMSVSettings &settings, M
 void CommunicationController::update() {
     nrfRadio.startListening();
     parseNextCommand();
-
     handleQueuedCommand();
 
 }
@@ -51,7 +50,8 @@ void CommunicationController::parseNextCommand() {
         nrfRadio.read(data, size);
 
         if (Command::validate(data, size)) {
-            commandQueue.push(Command::parse(data, size));
+            const Command &el = Command::parse(data, size);
+            commandQueue.push(el);
             nrfRadio.stopListening();
         } else {
             Serial.println("Invalid command received");
@@ -62,6 +62,7 @@ void CommunicationController::parseNextCommand() {
 void CommunicationController::handleQueuedCommand() {
     if (!commandQueue.empty()) {
         const auto &command = commandQueue.front();
+        Serial.println(command.message_id);
         switch (static_cast<CommandCategory>(command.category_id)) {
             case CommandCategory::GENERAL:
                 sendReturnCommand(generalCommandHandler.handle(command));

@@ -7,7 +7,7 @@
 
 
 Command Command::parse(uint8_t *data, const uint8_t &len) {
-    Command c(data[0] >> 5u, data[0] & 0x1Fu, data[2]);
+    Command c(data[0] >> 5u, data[0] & 0x1Fu, data[1]);
 
     c.parameter_length = len - 2;
 
@@ -15,7 +15,7 @@ Command Command::parse(uint8_t *data, const uint8_t &len) {
         c.parameters[i] = data[i + 2];
     }
 
-    for (size_t i = c.parameter_length; i < 30; i++) {
+    for (size_t i = c.parameter_length; i < COMMAND_MAX_PARAM_LENGTH; i++) {
         c.parameters[i] = 0;
     }
 
@@ -24,7 +24,6 @@ Command Command::parse(uint8_t *data, const uint8_t &len) {
 
 bool Command::validate(const uint8_t *data, const uint8_t &len) {
     if (len < 2) {
-        Serial.println("toto short");
         return false;
     }
 
@@ -36,7 +35,6 @@ bool Command::validate(const uint8_t *data, const uint8_t &len) {
 
 
     if (param_length >= sizes.first && param_length <= sizes.second) {
-        Serial.println("Good boy command");
         return true;
     }
 
@@ -85,6 +83,8 @@ std::pair<uint8_t, uint8_t> Command::getParameterLimits(CommandCategory cat, uin
                     return {2, 3};
                 case ActionCommand::START_ROTATE_DEGREES:
                     return {3, 3};
+                case ActionCommand::START_ROTATE_STEPS:
+                    return {3, 3};
                 case ActionCommand::SET_SPEED:
                     return {1, 1};
             }
@@ -101,3 +101,5 @@ std::pair<uint8_t, uint8_t> Command::getParameterLimits(CommandCategory cat, uin
 
     return {255, 255};
 }
+
+Command::Command(): category_id(255), command_id(255), message_id(255), parameters{255}, parameter_length(255)  {}

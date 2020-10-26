@@ -29,7 +29,8 @@ enum class ActionCommand : uint8_t {
     START_MOVE_STEPS     = 1,
     START_MOVE_CM        = 2,
     START_ROTATE_DEGREES = 3,
-    SET_SPEED            = 4
+    START_ROTATE_STEPS   = 4,
+    SET_SPEED            = 5
 };
 
 /**
@@ -41,9 +42,7 @@ enum class MeasurementCommand : uint8_t {
 };
 
 
-
-
-
+static const size_t COMMAND_MAX_PARAM_LENGTH = 5;
 
 /**
  * A struct containing a command received by the robot.
@@ -57,9 +56,11 @@ struct Command {
     uint8_t message_id;
 
     /// All parameter bytes given for this command
-    uint8_t parameters[5];
+    uint8_t parameters[COMMAND_MAX_PARAM_LENGTH];
     /// The byte count of the parameters stored in "parameters"
     size_t  parameter_length;
+
+    Command();
 
     /**
      * Create an empty message
@@ -95,7 +96,7 @@ struct Command {
      * @param cmd The command ID
      * @return A pair of sizes, where first is the minimum size, and second is the maximum size
      */
-    static std::pair<uint8_t, uint8_t> getParameterLimits(CommandCategory cat, uint8_t cmd);
+    static std::pair <uint8_t, uint8_t> getParameterLimits(CommandCategory cat, uint8_t cmd);
 
     /**
      * Get a 16 bit unsigned integer from the parameters

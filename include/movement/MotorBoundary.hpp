@@ -10,6 +10,7 @@
 class MotorBoundary {
     /// Stepper motor object that is used to move the motor
     AccelStepper stepper;
+    bool direction  = true;
 public:
     /**
      * Create a MotorBoundary
@@ -41,4 +42,13 @@ public:
      * Usually steps the motor at least once
      */
     void update();
+
+    /**
+     * Change the direction this motor will rotate.
+     *
+     * Note: this does not change directions for movements that are already started
+     * @param dir The new directin (true for forward, false for backward.
+     */
+    void setDirection(bool dir);
+
 };

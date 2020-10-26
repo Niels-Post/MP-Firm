@@ -4,7 +4,9 @@
 #include <communication/handler/GeneralCommandHandler.hpp>
 #include <communication/handler/ActionCommandHandler.hpp>
 #include <communication/handler/MeasurementCommandHandler.hpp>
-#include <queue>
+
+#include <util/StackQueue.hpp>
+
 #include <communication/command/Command.hpp>
 #include <communication/command/ReturnCommand.hpp>
 
@@ -19,6 +21,7 @@ class ReturnCommand;
  * This controller continuously checks for received RF24 Commands, parses them, and invokes a \refitem{CommandHandler} for them.
  * The controller then transmits the ReturnCode from the handler to the sender of the command
  */
+
 class CommunicationController {
 private:
     /// The radio used to communicate with the other party
@@ -30,7 +33,9 @@ private:
     /// A handler for commands in the category MEASUREMENT
     MeasurementCommandHandler measurementCommandHandler;
     /// Queue of commands that are still to be handled
-    std::queue<Command> commandQueue;
+    StackQueue<Command, 20>            commandQueue;
+
+    ///
 
 
 protected:

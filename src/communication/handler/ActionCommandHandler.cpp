@@ -33,6 +33,10 @@ ReturnCommand ActionCommandHandler::handle(const Command &cmd) {
             movementController.startRotateDegrees(cmd.get_param16(0), cmd.parameters[2]);
 
             break;
+        case ActionCommand::START_ROTATE_STEPS:
+            movementController.startRotateSteps(cmd.get_param16(0), cmd.parameters[2]);
+
+            break;
         case ActionCommand::SET_SPEED:
             movementController.setSpeed(cmd.parameters[0]);
             break;

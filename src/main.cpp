@@ -59,17 +59,17 @@ static const PMSVSettings default_settings(
         false,
         0,
         0,
-        RF24_PA_HIGH,
+        RF24_PA_LOW,
         50,
         0xE0E0F1F1E0LL,
         0xE0E0F1F1E4LL,
         true,
         32,
         false,
-        9,
-        10,
-        {12, 5, 4, 80},
-        {11, 31, 30, 80});
+        5,
+        4,
+        {13, 10, 9, 80},
+        {8, 3, 2, 80});
 
 
 void setup() {
