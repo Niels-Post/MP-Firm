@@ -1,56 +1,17 @@
 #include <Arduino.h>
-#include <pmsv/PMSVSettings.hpp>
-#include <pmsv/PMSVRobot.hpp>
-
-
-
-
 
 #define R_SENSE 0.11f
 constexpr uint32_t steps_per_mm = 80;
 
+#include <entity/PMSVSettings.hpp>
+#include <boundary/communication/commandboundary/NRFBoundary.hpp>
+#include <boundary/movement/StepperBoundary/AccelStepperBoundary.hpp>
+#include <controller/MovementController.hpp>
+#include <controller/CommunicationController.hpp>
+#include <controller/CommandCategoryController/GeneralCommandController.hpp>
+#include <controller/CommandCategoryController/ActionCommandController.hpp>
+#include <controller/CommandCategoryController/MeasurementCommandController.hpp>
 
-#include <AccelStepper.h>
-
-
-//void setup() {
-//    SPI.begin();
-//    Serial.begin(9600);
-//    while (!Serial);
-//    Serial.println("Start...");
-//
-//    stepper.setMaxSpeed(50 * steps_per_mm); // 100mm/s @ 80 steps/mm
-//    stepper.setAcceleration(1000 * steps_per_mm); // 2000mm/s^2
-//    stepper.setEnablePin(EN_PIN);
-//    stepper.setPinsInverted(false, false, true);
-//    stepper.enableOutputs();
-//
-//    stepper2.setMaxSpeed(50 * steps_per_mm); // 100mm/s @ 80 steps/mm
-//    stepper2.setAcceleration(1000 * steps_per_mm); // 2000mm/s^2
-//    stepper2.setEnablePin(EN_PIN_2);
-//    stepper2.setPinsInverted(true, false, true);
-//    stepper2.enableOutputs();
-//
-//}
-//
-//void loop() {
-//    if (stepper.distanceToGo() == 0) {
-//        stepper.disableOutputs();
-//        delay(100);
-//        stepper.move(100 * steps_per_mm); // Move 100mm
-//        stepper.enableOutputs();
-//    }
-//    stepper.run();
-//
-//
-//    if (stepper2.distanceToGo() == 0) {
-//        stepper2.disableOutputs();
-//        delay(100);
-//        stepper2.move(100 * steps_per_mm); // Move 100mm
-//        stepper2.enableOutputs();
-//    }
-//    stepper2.run();
-//}
 
 static const PMSVSettings default_settings(
         0,
@@ -75,14 +36,52 @@ static const PMSVSettings default_settings(
 void setup() {
     Serial.begin(9600);
 
+    //    Set up Boundaries
+    NRFBoundary nrfBoundary{
+            default_settings.nrf_pin_ce,
+            default_settings.nrf_pin_csn,
+            default_settings.nrf_channel,
+            default_settings.nrf_readingpipe,
+            default_settings.nrf_writingpipe,
+            default_settings.nrf_enable_autoack,
+            default_settings.nrf_enable_dynamicpayloads,
+            default_settings.nrf_payload_size,
+            default_settings.nrf_palevel,
+    };
+
+    AccelStepperBoundary leftMotor{
+            default_settings.leftMotor.pin_enable,
+            default_settings.leftMotor.pin_step,
+            default_settings.leftMotor.pin_dir,
+            default_settings.leftMotor.steps_per_mm,
+    };
+
+    AccelStepperBoundary rightMotor{
+            default_settings.rightMotor.pin_enable,
+            default_settings.rightMotor.pin_step,
+            default_settings.rightMotor.pin_dir,
+            default_settings.rightMotor.steps_per_mm,
+    };
+
+    MovementController movementController{leftMotor, rightMotor, default_settings};
 
 
-    PMSVRobot robot(default_settings);
+    GeneralCommandController generalCommandHandler{};
+    ActionCommandController      actionCommandHandler{movementController};
+    MeasurementCommandController measurementCommandHandler{};
 
+    CommandCategoryController *commandCategoryHandlers[] = {
+            &generalCommandHandler,
+            &actionCommandHandler,
+            &measurementCommandHandler
+    };
+
+    CommunicationController<20, array_size(commandCategoryHandlers)> communicationController{nrfBoundary, commandCategoryHandlers};
 
     volatile bool _true = true;
     while (_true) {
-        robot.update();
+        movementController.update();
+        communicationController.update();
     }
 
 }

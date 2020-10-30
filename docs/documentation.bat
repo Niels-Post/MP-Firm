@@ -1,2 +1,2 @@
 doxygen Doxyfile
-sphinx-build -b html -Dbreathe_projects.PMSVRobot=./xml "." "_build"
+sphinx-build -b html -Dbreathe_projects.MPFirm=xml "." "_build"
