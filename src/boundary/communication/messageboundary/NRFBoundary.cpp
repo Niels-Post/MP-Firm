@@ -2,7 +2,7 @@
 // Created by niels on 30/10/2020.
 //
 
-#include "boundary/communication/commandboundary/NRFBoundary.hpp"
+#include "boundary/communication/messageboundary/NRFBoundary.hpp"
 
 NRFBoundary::NRFBoundary(uint16_t pin_ce, uint16_t pin_csn, uint8_t channel, uint64_t readingPipe, uint64_t writingPipe,
                          bool enableAutoAck,
@@ -51,10 +51,6 @@ ControllerMessage NRFBoundary::getNextMessage()  {
     uint8_t data[size];
     nrfRadio.read(data, size);
     ControllerMessage cmd;
-
-    if (ControllerMessage::validate(data, size)) {
-        cmd = ControllerMessage::parse(data, size);
-    }
 
     return cmd;
 }

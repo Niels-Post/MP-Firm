@@ -4,13 +4,14 @@
 constexpr uint32_t steps_per_mm = 80;
 
 #include <entity/PMSVSettings.hpp>
-#include <boundary/communication/commandboundary/NRFBoundary.hpp>
 #include <boundary/movement/StepperBoundary/AccelStepperBoundary.hpp>
 #include <controller/MovementController.hpp>
 #include <controller/CommunicationController.hpp>
 #include <controller/CommandCategoryController/GeneralCommandController.hpp>
 #include <controller/CommandCategoryController/ActionCommandController.hpp>
 #include <controller/CommandCategoryController/MeasurementCommandController.hpp>
+#include <boundary/communication/messageboundary/NRFBoundary.hpp>
+#include <boundary/communication/messageboundary/UartMessageBoundary.hpp>
 
 
 static const PMSVSettings default_settings(

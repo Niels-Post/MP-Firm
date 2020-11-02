@@ -1,5 +1,9 @@
 #pragma once
 
+#undef min
+#undef max
+#include <algorithm>
+
 template<typename T, size_t max_size>
 class StackQueue {
     size_t _front = 0;

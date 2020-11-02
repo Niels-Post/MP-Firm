@@ -27,5 +27,8 @@ public:
      */
     ActionCommandController(MovementController &movementController);
 
+
     uint8_t getCategoryID() override;
+
+    std::pair<uint8_t, uint8_t> getParameterLimits(uint8_t command_id) override;
 };

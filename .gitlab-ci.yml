@@ -1,0 +1,18 @@
+image: alpine
+
+pages:
+  stage: deploy
+  script:
+    - apk update && apk add doxygen graphviz python3 python3-dev py3-pip
+    - cd docs/
+    - pip install -r requirements.txt
+    - doxygen Doxyfile
+    - sphinx-build -b html -Dbreathe_projects.MPFirm=xml "." "_build"
+    - rm -rf public && mv _build/ public/
+  artifacts:
+    paths:
+      - public
+  only:
+    - development
+
+

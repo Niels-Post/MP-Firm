@@ -12,14 +12,14 @@ enum class CommandCategory : uint8_t {
 /**
  * Commands in the "General" category
  */
-enum class GeneralCommand : uint8_t {
+enum GeneralCommand {
     SET_COMMUNICATION_ACTIVEMODE = 0
 };
 
 /**
  * Commands in the "Action" category
  */
-enum class ActionCommand : uint8_t {
+enum ActionCommand {
     CANCEL_MOVEMENT      = 0,
     START_MOVE_MM        = 1,
     START_ROTATE_DEGREES = 2,
@@ -29,7 +29,7 @@ enum class ActionCommand : uint8_t {
 /**
  * Commands in the "Measurement" category
  */
-enum class MeasurementCommand : uint8_t {
+enum MeasurementCommand {
     GET_MEASUREMENT_RAW,
     GET_DISTANCE_SENSOR
 };

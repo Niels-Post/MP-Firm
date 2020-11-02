@@ -10,7 +10,7 @@
  *
  * It is assumed that communication is two way between 1 controller and 1 robot (it is not a busline)
  */
-class CommandBoundary {
+class MessageBoundary {
 public:
     /**
      * Transmit a returncommand to the Controller

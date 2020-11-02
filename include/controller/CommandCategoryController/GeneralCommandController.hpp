@@ -18,4 +18,6 @@ public:
 
     GeneralCommandController();
 
+    std::pair<uint8_t, uint8_t> getParameterLimits(uint8_t command_id) override;
+
 };

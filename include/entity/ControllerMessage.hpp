@@ -18,11 +18,11 @@ struct ControllerMessage {
     uint8_t command_id;
     /// A value for identifying a specific message.
     uint8_t message_id;
-
-    /// All parameter bytes given for this command
-    uint8_t parameters[COMMAND_MAX_PARAM_LENGTH];
     /// The byte count of the parameters stored in "parameters"
     size_t  parameter_length;
+    /// All parameter bytes given for this command
+    uint8_t parameters[COMMAND_MAX_PARAM_LENGTH];
+
 
     ControllerMessage();
 
@@ -40,27 +40,7 @@ struct ControllerMessage {
      * @param len Length of the array
      * @return
      */
-    static ControllerMessage parse(uint8_t *data, const uint8_t &len);
-
-    /**
-     * Check if an array of data is a properly formatted Command
-     *
-     * \details Checks if the size is correct for the given command.
-     * Checks if the command given is known.
-     * @param data
-     * @param len
-     * @return
-     */
-    static bool validate(const uint8_t *data, const uint8_t &len);
-
-    /**
-     * Get the minimum and maximum parameter length for a given command.
-     *
-     * @param cat The Command Category id
-     * @param cmd The command ID
-     * @return A pair of sizes, where first is the minimum size, and second is the maximum size
-     */
-    static std::pair <uint8_t, uint8_t> getParameterLimits(CommandCategory cat, uint8_t cmd);
+    static ControllerMessage parse(uint8_t *data, const uint8_t &len = 0);
 
     /**
      * Get a 16 bit unsigned integer from the parameters
@@ -78,8 +58,10 @@ struct ControllerMessage {
      */
     uint32_t get_param32(const size_t &startIndex, bool msb_first = true) const;
 
-    bool isValid() {
-        return (category_id != 255 || command_id != 255 || message_id != 255);
+    bool isValid() const;
+
+    static size_t maxMessageSize() {
+        return COMMAND_MAX_PARAM_LENGTH + 3;
     }
 
 };

@@ -1,10 +1,10 @@
 #pragma once
 
-#include <boundary/communication/CommandBoundary.hpp>
+#include <boundary/communication/MessageBoundary.hpp>
 #include <RF24.h>
 
 
-class NRFBoundary: public CommandBoundary {
+class NRFBoundary: public MessageBoundary {
     /// The radio used to communicate with the other party
     RF24                      nrfRadio;
 

@@ -5,11 +5,11 @@
 
 RobotMessage ActionCommandController::handle(const ControllerMessage &cmd) {
     SuccessCode code = SuccessCode::BAD_PARAMETERS;
-    switch (static_cast<ActionCommand>(cmd.command_id)) {
-        case ActionCommand::CANCEL_MOVEMENT:
+    switch (cmd.command_id) {
+        case CANCEL_MOVEMENT:
             code = movementController.halt();
             break;
-        case ActionCommand::START_MOVE_MM: {
+        case START_MOVE_MM: {
             if (cmd.parameter_length > 2) {
                 movementController.setDirection(cmd.parameters[2]);
             }
@@ -17,13 +17,15 @@ RobotMessage ActionCommandController::handle(const ControllerMessage &cmd) {
             code = movementController.startMoveMM(cmd.get_param16(0));
             break;
         }
-        case ActionCommand::START_ROTATE_DEGREES:
+        case START_ROTATE_DEGREES:
             code = movementController.startRotateDegrees(cmd.get_param16(0), cmd.parameters[2]);
 
             break;
-        case ActionCommand::SET_SPEED:
+        case SET_SPEED:
             code = movementController.setSpeed(cmd.parameters[0]);
             break;
+        default:
+            code = SuccessCode::BAD_PARAMETERS;
     }
 
     return {cmd.message_id, code};
@@ -34,4 +36,19 @@ ActionCommandController::ActionCommandController(MovementController &movementCon
 
 uint8_t ActionCommandController::getCategoryID() {
     return 1;
+}
+
+std::pair<uint8_t, uint8_t> ActionCommandController::getParameterLimits(uint8_t command_id) {
+    switch (command_id) {
+        case CANCEL_MOVEMENT:
+            return {0, 0};
+        case START_MOVE_MM:
+            return {2, 3};
+        case START_ROTATE_DEGREES:
+            return {3, 3};;
+        case SET_SPEED:
+            return {1, 1};
+        default:
+            return {255, 255};
+    }
 }

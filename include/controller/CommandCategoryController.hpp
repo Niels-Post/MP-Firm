@@ -15,9 +15,16 @@ public:
     virtual uint8_t getCategoryID() = 0;
 
     /**
-     * This method is called when a command is received with a category_id equal to getCategoryID().
-     * @param cmd Command to handle
+     * Process and execute a command in a message, and return a success code
+     * @param cmd Message to handle
      * @return The result of the command. This should be sent back to the sender of the command
      */
     virtual RobotMessage handle(const ControllerMessage &cmd) = 0;
+
+    /**
+     * Get the minimum and maximum size of each command in this category
+     * @param command_id The command id the bounds are requested for
+     * @return A pair of the minimum and maximum size
+     */
+    virtual std::pair<uint8_t, uint8_t> getParameterLimits(uint8_t command_id) = 0;
 };

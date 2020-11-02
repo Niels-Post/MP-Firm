@@ -3,7 +3,7 @@
 #include <RF24.h>
 
 #include <entity/StackQueue.hpp>
-#include <boundary/communication/CommandBoundary.hpp>
+#include <boundary/communication/MessageBoundary.hpp>
 #include "CommandCategoryController.hpp"
 
 class PMSVSettings;
@@ -28,7 +28,7 @@ constexpr std::size_t array_size(const T (&array)[N]) noexcept
 template<size_t commandQueueMaxLength, size_t handlerCount>
 class CommunicationController {
 private:
-    CommandBoundary                                       &commandBoundary;
+    MessageBoundary                                       &commandBoundary;
     /// Queue of commands that are still to be handled
     StackQueue <ControllerMessage, commandQueueMaxLength> commandQueue;
     ///
@@ -63,14 +63,31 @@ protected:
     void parseNextCommand() {
         if (commandBoundary.isMessageAvailable()) {
             ControllerMessage cmd = commandBoundary.getNextMessage();
-            if (cmd.isValid()) {
+            if (isKnownAndValidMessage(cmd)) {
                 commandQueue.push(cmd);
             }
         }
     }
 
+
+    bool isKnownAndValidMessage(const ControllerMessage &msg) {
+        if(msg.isValid()) {
+            return false;
+        }
+
+        for (CommandCategoryController *handler: commandCategoryHandlers) {
+            if (msg.category_id == handler->getCategoryID()) {
+                auto limits = handler->getParameterLimits(msg.command_id);
+                if(msg.parameter_length >= limits.first && msg.parameter_length <= limits.second) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 public:
-    CommunicationController(CommandBoundary &commandBoundary,
+    CommunicationController(MessageBoundary &commandBoundary,
                             CommandCategoryController *commandCatHandlers[handlerCount])
             : commandBoundary(commandBoundary), commandQueue() {
         for (size_t i = 0; i < handlerCount; i++) {
