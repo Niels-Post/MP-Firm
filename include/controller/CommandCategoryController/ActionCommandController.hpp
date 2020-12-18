@@ -19,7 +19,7 @@ public:
      * @param cmd Command to handle
      * @return The result of the action. This should be sent back to the sender of the command
      */
-    RobotMessage handle(const ControllerMessage &cmd) override;
+    RobotMessage handle(const ControllerMessage &cmd, std::function<void(RobotMessage &)> callback) override;
 
     /**
      * Construct the ActionCommandHandler

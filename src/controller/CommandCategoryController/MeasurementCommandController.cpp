@@ -2,7 +2,7 @@
 #include <controller/CommandCategoryController/MeasurementCommandController.hpp>
 
 
-RobotMessage MeasurementCommandController::handle(const ControllerMessage &cmd) {
+RobotMessage MeasurementCommandController::handle(const ControllerMessage &cmd, std::function<void(RobotMessage &)> callback) {
     return {0, SuccessCode::UNKNOWN_COMMAND};
 }
 

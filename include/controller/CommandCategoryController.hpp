@@ -2,6 +2,7 @@
 
 #include <entity/RobotMessage.hpp>
 #include <entity/ControllerMessage.hpp>
+#include <functional>
 
 /**
   * Interface to handle commands in a specific category
@@ -19,7 +20,7 @@ public:
      * @param cmd Message to handle
      * @return The result of the command. This should be sent back to the sender of the command
      */
-    virtual RobotMessage handle(const ControllerMessage &cmd) = 0;
+    virtual RobotMessage handle(const ControllerMessage &cmd, std::function<void(RobotMessage &)> callback ) = 0;
 
     /**
      * Get the minimum and maximum size of each command in this category

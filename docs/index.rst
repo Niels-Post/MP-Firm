@@ -103,6 +103,8 @@ The result might look as follows:
    };
 
 While editing this file, it is recommended to add an enum for the commands in your custom category.
+This enum can later be used to easily check which command was sent.
+
 For the example, our category only accepts two commands, so the enum may look like:
 
 .. code-block:: c++

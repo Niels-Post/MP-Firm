@@ -3,6 +3,10 @@
 #include <entity/RobotMessage.hpp>
 #include <boundary/movement/MotorBoundary.hpp>
 
+#undef min
+#undef max
+#include <functional>
+
 class PMSVSettings;
 
 class MovementController {
@@ -13,7 +17,14 @@ class MovementController {
     /// Reference to the settings object to use to convert values
     const PMSVSettings &settings;
 
-    SuccessCode tryMoveMM(uint16_t mm) const;
+    ///
+    bool isCallbackEnabled = false;
+    ///
+    std::function<void(RobotMessage &)> current_callback;
+
+
+
+    SuccessCode tryMoveMM(uint16_t mm, std::function<void(RobotMessage &)> callback);
 public:
     /**
      * Change the speed of movement.
@@ -39,7 +50,7 @@ public:
      * @param mm Distance in CM
      * @return
      */
-    SuccessCode startMoveMM(uint16_t mm);
+    SuccessCode startMoveMM(uint16_t mm, std::function<void(RobotMessage &)> callback);
 
     /**
      * Start a rotation of a specified angle
@@ -47,7 +58,8 @@ public:
      * @param rotate_direction The rotation direction (true for right, false for left)
      * @return
      */
-    SuccessCode startRotateDegrees(uint16_t degrees, bool rotate_direction);
+    SuccessCode
+    startRotateDegrees(uint16_t degrees, bool rotate_direction, std::function<void(RobotMessage &)> callback);
 
     /**
      * Stop all movements currently being made

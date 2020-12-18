@@ -15,23 +15,22 @@ constexpr uint32_t steps_per_mm = 80;
 
 
 static const PMSVSettings default_settings(
-        0,
-        0,
+        8,
         false,
         false,
         0,
         0,
-        RF24_PA_LOW,
+        RF24_PA_HIGH,
         50,
-        0xE0E0F1F1E0LL,
+        0xE0E0F1F1E4LL,
         0xE0E0F1F1E4LL,
         true,
         32,
-        false,
+        true,
         5,
         4,
-        {13, 10, 9, 80},
-        {8, 3, 2, 80});
+        {13, 10, 9, 8},
+        {8, 3, 2, 8});
 
 
 void setup() {

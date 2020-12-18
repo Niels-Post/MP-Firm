@@ -29,6 +29,7 @@ NRFBoundary::NRFBoundary(uint16_t pin_ce, uint16_t pin_csn, uint8_t channel, uin
     nrfRadio.openWritingPipe(writingPipe);
 
     nrfRadio.powerUp();
+    nrfRadio.startListening();
 
     nrfRadio.printDetails();
 }
@@ -43,6 +44,7 @@ bool NRFBoundary::sendMessage(const RobotMessage &robotMessage) {
 }
 
 bool NRFBoundary::isMessageAvailable() {
+
     return nrfRadio.available();
 }
 
@@ -50,7 +52,7 @@ ControllerMessage NRFBoundary::getNextMessage()  {
     auto    size = nrfRadio.getDynamicPayloadSize();
     uint8_t data[size];
     nrfRadio.read(data, size);
-    ControllerMessage cmd;
+    ControllerMessage cmd = ControllerMessage::parse(data, size);
 
     return cmd;
 }

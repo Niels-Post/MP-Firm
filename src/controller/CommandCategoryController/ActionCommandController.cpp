@@ -1,9 +1,8 @@
 #include <controller/CommandCategoryController/ActionCommandController.hpp>
 
 #include <controller/MovementController.hpp>
-
-
-RobotMessage ActionCommandController::handle(const ControllerMessage &cmd) {
+#include <Arduino.h>
+RobotMessage ActionCommandController::handle(const ControllerMessage &cmd, std::function<void(RobotMessage &)> callback) {
     SuccessCode code = SuccessCode::BAD_PARAMETERS;
     switch (cmd.command_id) {
         case CANCEL_MOVEMENT:
@@ -14,11 +13,12 @@ RobotMessage ActionCommandController::handle(const ControllerMessage &cmd) {
                 movementController.setDirection(cmd.parameters[2]);
             }
 
-            code = movementController.startMoveMM(cmd.get_param16(0));
+            code = movementController.startMoveMM(cmd.get_param16(0), callback);
             break;
         }
         case START_ROTATE_DEGREES:
-            code = movementController.startRotateDegrees(cmd.get_param16(0), cmd.parameters[2]);
+            code = movementController.startRotateDegrees(cmd.get_param16(0), cmd.parameters[2],
+                                                         callback);
 
             break;
         case SET_SPEED:

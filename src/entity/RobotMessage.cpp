@@ -14,3 +14,7 @@ RobotMessage::RobotMessage(uint8_t messageId, SuccessCode returnCode, uint8_t da
         data[i] = dat[i];
     }
 }
+
+RobotMessage::RobotMessage(SuccessCode returnCode, uint8_t data_length, const uint8_t *dat): RobotMessage(0,returnCode,data_length,dat) {
+
+}

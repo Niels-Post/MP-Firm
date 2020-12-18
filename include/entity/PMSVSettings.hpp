@@ -19,8 +19,8 @@ class PMSVSettings {
 
 public:
     // Settings related to the Movement Controller
-    uint16_t steps_per_cm;
-    uint16_t degrees_per_mm_distance;
+
+    uint16_t mm_distance_per_degree;
     bool     left_motor_fwd;
     bool     right_motor_fwd;
     uint16_t min_speed;
@@ -46,13 +46,12 @@ public:
     StepperSettings rightMotor;
 
 
-    PMSVSettings(uint16_t stepsPerCm, uint16_t stepsPerDegree, bool leftMotorFwd, bool rightMotorFwd, uint16_t minSpeed,
+    PMSVSettings(uint16_t mm_per_degree, bool leftMotorFwd, bool rightMotorFwd, uint16_t minSpeed,
                  uint16_t maxSpeed, rf24_pa_dbm_e nrfPalevel, uint8_t nrfChannel, uint64_t nrfReadingpipe,
                  uint64_t nrfWritingpipe, bool nrfEnableDynamicpayloads, size_t nrfPacketSize, bool nrfEnableAutoack,
                  uint8_t nrfPinCe, uint8_t nrfPinCsn, StepperSettings leftMotor, StepperSettings rightMotor)
-            : steps_per_cm(stepsPerCm),
-              degrees_per_mm_distance(
-                      stepsPerDegree),
+            : mm_distance_per_degree(
+            mm_per_degree),
               left_motor_fwd(
                       leftMotorFwd),
               right_motor_fwd(

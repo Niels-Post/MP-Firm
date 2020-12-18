@@ -12,7 +12,7 @@ public:
      * @param cmd Command to handle
      * @return The result of the command, usually containing a measurement. This should be sent back to the sender of the command
      */
-    RobotMessage handle(const ControllerMessage &cmd) override;
+    RobotMessage handle(const ControllerMessage &cmd, std::function<void(RobotMessage &)> callback) override;
 
     uint8_t getCategoryID() override;
 

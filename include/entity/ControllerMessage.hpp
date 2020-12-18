@@ -4,7 +4,9 @@
 #include <cstdio>
 #include <utility>
 #include <entity/CommandData.hpp>
-
+#include <Arduino.h>
+#undef min
+#undef max
 
 static const size_t COMMAND_MAX_PARAM_LENGTH = 5;
 
@@ -63,5 +65,17 @@ struct ControllerMessage {
     static size_t maxMessageSize() {
         return COMMAND_MAX_PARAM_LENGTH + 3;
     }
+
+    void print() const {
+        Serial.println("---message---");
+        Serial.print("Category: ");
+        Serial.println(category_id);
+        Serial.print("Command: ");
+        Serial.println(command_id);
+        Serial.print("Message: ");
+        Serial.println(message_id);
+        Serial.println("----------------");
+    }
+
 
 };

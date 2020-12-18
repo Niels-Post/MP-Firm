@@ -12,9 +12,8 @@ class PMSVSettings;
 class RobotMessage;
 
 
-template <class T, std::size_t N>
-constexpr std::size_t array_size(const T (&array)[N]) noexcept
-{
+template<class T, std::size_t N>
+constexpr std::size_t array_size(const T (&array)[N]) noexcept {
     return N;
 }
 
@@ -28,11 +27,11 @@ constexpr std::size_t array_size(const T (&array)[N]) noexcept
 template<size_t commandQueueMaxLength, size_t handlerCount>
 class CommunicationController {
 private:
-    MessageBoundary                                       &commandBoundary;
+    MessageBoundary &commandBoundary;
     /// Queue of commands that are still to be handled
-    StackQueue <ControllerMessage, commandQueueMaxLength> commandQueue;
+    StackQueue<ControllerMessage, commandQueueMaxLength> commandQueue;
     ///
-    CommandCategoryController                             *commandCategoryHandlers[handlerCount];
+    CommandCategoryController *commandCategoryHandlers[handlerCount];
 
 
 protected:
@@ -41,10 +40,17 @@ protected:
      */
     void handleQueuedCommand() {
         if (!commandQueue.empty()) {
-            const auto                     &command = commandQueue.front();
+            const auto &command = commandQueue.front();
             for (CommandCategoryController *handler: commandCategoryHandlers) {
                 if (command.category_id == handler->getCategoryID()) {
-                    commandBoundary.sendMessage(handler->handle(command));
+                    RobotMessage firstResponse = handler->handle(command, [this, command](RobotMessage &msg) {
+                        msg.message_id = command.message_id;
+                        commandBoundary.sendMessage(msg);
+                    });
+
+                    commandBoundary.sendMessage(firstResponse);
+
+
                     commandQueue.pop();
                     return;
                 }
@@ -52,6 +58,7 @@ protected:
 
             Serial.println("Command category not recognized");
         }
+
     }
 
     /**
@@ -63,6 +70,7 @@ protected:
     void parseNextCommand() {
         if (commandBoundary.isMessageAvailable()) {
             ControllerMessage cmd = commandBoundary.getNextMessage();
+
             if (isKnownAndValidMessage(cmd)) {
                 commandQueue.push(cmd);
             }
@@ -71,18 +79,22 @@ protected:
 
 
     bool isKnownAndValidMessage(const ControllerMessage &msg) {
-        if(msg.isValid()) {
+        if (!msg.isValid()) {
+            msg.print();
             return false;
         }
 
         for (CommandCategoryController *handler: commandCategoryHandlers) {
             if (msg.category_id == handler->getCategoryID()) {
                 auto limits = handler->getParameterLimits(msg.command_id);
-                if(msg.parameter_length >= limits.first && msg.parameter_length <= limits.second) {
+                if (msg.parameter_length >= limits.first && msg.parameter_length <= limits.second) {
+
                     return true;
                 }
             }
         }
+
+        Serial.println("No Handler");
         return false;
     }
 

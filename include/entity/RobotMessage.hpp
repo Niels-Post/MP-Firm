@@ -22,7 +22,9 @@ enum class SuccessCode : uint8_t {
     /// A reading was requested for a sensor that doesn't exist
     NO_SUCH_SENSOR = 5,
     /// The command requested is unknown
-    UNKNOWN_COMMAND = 6
+    UNKNOWN_COMMAND = 6,
+    /// Special case: Action started is used when the robot cannot immediately send a response. The robot does not send this code
+    ACTION_STARTED = 7
 };
 
 /**
@@ -36,7 +38,7 @@ struct RobotMessage {
     /// (Optional) the data returned from the Command
     uint8_t     data[4];
     /// Size of the data returned
-    size_t     data_size;
+    uint8_t   data_size;
 
     /**
      * Create a ReturnCommand
@@ -44,10 +46,15 @@ struct RobotMessage {
     RobotMessage(uint8_t messageId, SuccessCode returnCode, uint8_t data_length = 0, const uint8_t *dat = nullptr);
 
     /**
+     * Create a ReturnCommand
+     */
+    RobotMessage(SuccessCode returnCode, uint8_t data_length = 0, const uint8_t *dat = nullptr);
+
+    /**
      * Get the byte size of this command
      * @return Total size of the command in bytes
      */
-    size_t size() const {
+    uint8_t size() const {
         return 2 + data_size;
     }
 };

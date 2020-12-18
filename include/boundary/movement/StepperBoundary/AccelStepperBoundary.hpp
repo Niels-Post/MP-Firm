@@ -55,4 +55,10 @@ public:
      */
     void setDirection(bool dir) override;
 
+    /**
+     * Check if this motor is currently moving
+     * @return True if the robot is still moving
+     */
+    bool isMoving() override;
+
 };

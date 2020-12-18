@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <entity/RobotMessage.hpp>
 
 class MotorBoundary{
 
@@ -12,4 +13,6 @@ public:
     virtual void setDirection(bool dir) = 0;
 
     virtual bool startMoveMM(uint16_t mm) = 0;
+
+    virtual bool isMoving() = 0;
 };

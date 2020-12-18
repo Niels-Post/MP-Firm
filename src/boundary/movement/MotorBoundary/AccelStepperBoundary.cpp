@@ -9,10 +9,9 @@ bool AccelStepperBoundary::startMoveSteps(uint16_t steps) {
     if (!direction) {
         tomove *= -1;
     }
-    Serial.println(tomove);
     stepper.move(tomove);
     stepper.enableOutputs();
-    return false;
+    return true;
 }
 
 void AccelStepperBoundary::halt() {
@@ -31,7 +30,7 @@ void AccelStepperBoundary::update() {
 AccelStepperBoundary::AccelStepperBoundary(uint8_t enable_pin, uint8_t step_pin, uint8_t dir_pin, uint8_t steps_per_mm)
         : stepper(stepper.DRIVER,
                   step_pin, dir_pin), stepsPerMM(steps_per_mm) {
-    stepper.setMaxSpeed(50 * steps_per_mm);
+    stepper.setMaxSpeed(100 * steps_per_mm);
     stepper.setAcceleration(1000 * steps_per_mm);
     stepper.setEnablePin(enable_pin);
     stepper.setPinsInverted(false, false, true);
@@ -45,5 +44,9 @@ void AccelStepperBoundary::setDirection(bool dir) {
 bool AccelStepperBoundary::startMoveMM(uint16_t mm) {
     return startMoveSteps(mm * stepsPerMM);
 
+}
+
+bool AccelStepperBoundary::isMoving() {
+    return stepper.distanceToGo() != 0;
 }
 
