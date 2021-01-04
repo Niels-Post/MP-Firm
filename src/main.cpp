@@ -20,7 +20,7 @@
 
 ////##################################################################   Configuration ###################################
 PMSVSettings default_settings{
-        0xE4,
+        0,
         1.434684f,
         1.4545f,
         0,
@@ -37,7 +37,7 @@ auto c_min_speed = registerConfig("MIN_SPEED", default_settings.min_speed);
 auto c_max_speed = registerConfig("MAX_SPEED", default_settings.max_speed);
 
 NRFConfiguration nrf_config{
-        RF24_PA_HIGH,
+        RF24_PA_MAX,
         50,
         0xE0E0F1F1E4LL,
         0xE0E0F1F1E4LL,

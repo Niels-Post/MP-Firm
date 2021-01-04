@@ -17,8 +17,7 @@ enum class CommandCategory : uint8_t {
  */
 enum GeneralCommand {
     REBOOT = 0,
-    DISCOVER = 1,
-    RESET_ID = 2
+    SET_ID = 1
 };
 
 /**

@@ -8,16 +8,15 @@ Response CommandController_General::handle(const Command &cmd, ResponseCallback 
         case REBOOT:
             rstc_start_software_reset(RSTC);
             break;
-        case DISCOVER:
-            if(pmsvSettings.robot_id == 0) {
-                return {cmd.message_id, SuccessCode::SUCCESS};
+        case SET_ID:
+            if(pmsvSettings.robot_id != 0) {
+                return {cmd.message_id, SuccessCode::NO_RESPONSE};
             }
-            return {cmd.message_id, SuccessCode::NO_RESPONSE};
-        case RESET_ID:
-            pmsvSettings.robot_id = 0;
+            pmsvSettings.robot_id = cmd.parameters[0];
             configRobotId.store();
+            Response res{cmd.message_id, SuccessCode::SUCCESS};
+            callback(res);
             rstc_start_software_reset(RSTC);
-            break;
     }
     return {cmd.message_id, SuccessCode::UNKNOWN_COMMAND};
 }
@@ -34,9 +33,9 @@ std::pair<uint8_t, uint8_t> CommandController_General::getParameterLimits(uint8_
 
     switch (cmd_id) {
         case REBOOT:
-        case DISCOVER:
-        case RESET_ID:
             return {0, 0};
+        case SET_ID:
+            return {1, 1};
         default:
             return {255, 255};
 
