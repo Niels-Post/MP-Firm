@@ -1,5 +1,5 @@
 #include <communication/commandcontroller/CommandController_Measurement.hpp>
-#include <core/communication/CommandRegistry.hpp>
+#include <communication/CommandRegistry.hpp>
 
 
 Response CommandController_Measurement::handle(const Command &cmd, ResponseCallback callback) {

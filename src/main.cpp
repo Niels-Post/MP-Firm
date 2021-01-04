@@ -10,15 +10,15 @@
 #include <communication/commandcontroller/CommandController_Measurement.hpp>
 #include <communication/commandcontroller/CommandController_Action.hpp>
 #include <core/communication/CommunicationController.hpp>
+#include <core/display/DisplayController.hpp>
 
 #include <core/util/ArraySize.hpp>
+#include <display/DisplayBoundary_SSD1306.hpp>
+
 
 #include <utility>
 
-#define R_SENSE 0.11f
-
-
-//##################################################################   Configuration ###################################
+////##################################################################   Configuration ###################################
 PMSVSettings default_settings{
         0xE4,
         1.434684f,
@@ -93,6 +93,17 @@ auto c_RIGHTmotor_forward_direction = registerConfig("RIGHTMOTOR_FORWARD_DIRECTI
                                                      rightMotorConfig.forward_direction);
 
 
+
+SSD1306Configuration displayConfiguration {
+    128,
+    32,
+    53,
+    59,
+    49,
+    51
+};
+
+
 std::reference_wrapper<BaseConfigurationValue> configurationValues[]{
         c_robot_id,
         c_rot_per_mm,
@@ -129,7 +140,7 @@ std::reference_wrapper<BaseConfigurationValue> configurationValues[]{
 void setup() {
     Serial.begin(9600);
 
-    //    Set up Boundaries
+//        Set up Boundaries
     CommandController_Configuration flashCommandController{configurationValues, lengthof(configurationValues)};
 
     NRF24CommunicationBoundary nrfBoundary{nrf_config, default_settings};
@@ -140,8 +151,12 @@ void setup() {
 
     MovementController movementController{leftMotor, rightMotor, default_settings};
 
+    DisplayBoundary_SSD1306 displayBoundary{displayConfiguration, default_settings};
 
-    CommandController_General generalCommandHandler{};
+    DisplayController displayController{displayBoundary, default_settings};
+
+
+    CommandController_General generalCommandHandler{default_settings, c_robot_id};
     CommandController_Action actionCommandHandler{movementController};
     CommandController_Measurement measurementCommandHandler{};
 
@@ -156,14 +171,16 @@ void setup() {
 
     CommunicationController communicationController{nrfBoundary, commandControllers, lengthof(commandControllers)};
     volatile bool _true = true;
+
     while (_true) {
         movementController.update();
         communicationController.update();
+        displayController.update();
     }
 
 }
 
 void loop() {
 }
-
-
+//
+//

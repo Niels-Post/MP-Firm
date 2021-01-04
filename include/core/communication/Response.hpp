@@ -27,6 +27,8 @@ enum class SuccessCode : uint8_t {
     UNKOWN_COMMAND_CATEGORY = 7,
     /// The command requested is unknown
     UNKNOWN_COMMAND = 8,
+    /// Do not send a response for this command
+    NO_RESPONSE = 9
 
 };
 

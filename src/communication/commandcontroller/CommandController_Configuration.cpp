@@ -1,5 +1,5 @@
 #include <communication/commandcontroller/CommandController_Configuration.hpp>
-#include <core/communication/CommandRegistry.hpp>
+#include <communication/CommandRegistry.hpp>
 
 
 Response

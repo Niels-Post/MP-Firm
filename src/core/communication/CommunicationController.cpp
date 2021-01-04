@@ -25,8 +25,9 @@ void CommunicationController::handleQueuedCommand() {
                     communicationBoundary.sendMessage(msg);
                 }
         );
-
-        communicationBoundary.sendMessage(initialResponse);
+        if(initialResponse.successCode != SuccessCode::NO_RESPONSE) {
+            communicationBoundary.sendMessage(initialResponse);
+        }
     }
 }
 

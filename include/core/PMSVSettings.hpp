@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 struct PMSVSettings {
     /// Robot Identifier. Should be set through the Configuration Commands
     uint8_t robot_id;

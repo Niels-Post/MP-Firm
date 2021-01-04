@@ -1,5 +1,5 @@
 #include <communication/commandcontroller/CommandController_Action.hpp>
-#include <core/communication/CommandRegistry.hpp>
+#include <communication/CommandRegistry.hpp>
 
 Response CommandController_Action::handle(const Command &cmd, ResponseCallback callback) {
     SuccessCode code = SuccessCode::BAD_PARAMETERS;

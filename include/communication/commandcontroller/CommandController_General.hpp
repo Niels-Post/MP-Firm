@@ -2,11 +2,15 @@
 
 
 #include <core/communication/BaseCommandController.hpp>
+#include <core/PMSVSettings.hpp>
+#include <core/configuration/ConfigurationValue.hpp>
 
 /**
  * Handles commands in the category \refitem{CommandCategory::GENERAL}
  */
 class CommandController_General : public BaseCommandController {
+    PMSVSettings &pmsvSettings;
+    ConfigurationValue<uint8_t> &configRobotId;
 public:
     /**
      * Handle a General Command
@@ -17,7 +21,7 @@ public:
 
     uint8_t getCategoryID() override;
 
-    CommandController_General();
+    CommandController_General(PMSVSettings &settings, ConfigurationValue<uint8_t> &robotIdConfig);
 
     std::pair<uint8_t, uint8_t> getParameterLimits(uint8_t command_id) override;
 
