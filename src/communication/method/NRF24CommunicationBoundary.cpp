@@ -1,8 +1,9 @@
 #include <communication/communicationboundary/NRF24CommunicationBoundary.hpp>
 
 
-NRF24CommunicationBoundary::NRF24CommunicationBoundary(NRFConfiguration &_config) : config(_config),
-                                                                                    nrfRadio(config.pin_ce, config.pin_csn) {
+NRF24CommunicationBoundary::NRF24CommunicationBoundary(NRFConfiguration &_config, PMSVSettings &settings)
+        : config(_config),
+          settings(settings), nrfRadio(config.pin_ce, config.pin_csn) {
     nrfRadio.begin();
     nrfRadio.setPALevel(config.palevel);
 
@@ -18,10 +19,15 @@ NRF24CommunicationBoundary::NRF24CommunicationBoundary(NRFConfiguration &_config
 
     nrfRadio.setChannel(config.channel);
 
-    nrfRadio.openReadingPipe(1, config.base_reading_pipe & ~0xFFu);
-    nrfRadio.openWritingPipe(config.base_writing_pipe & ~0xFFu);
+    const uint64_t base_address_mask = 0x000000FFu;
+
+    nrfRadio.openReadingPipe(1, config.base_reading_pipe & ~base_address_mask);
+    nrfRadio.openReadingPipe(2, (config.base_reading_pipe & ~base_address_mask) | settings.robot_id);
+    nrfRadio.openWritingPipe((config.base_writing_pipe & ~base_address_mask) | settings.robot_id);
 
     nrfRadio.powerUp();
+
+    nrfRadio.printDetails();
     nrfRadio.startListening();
 }
 

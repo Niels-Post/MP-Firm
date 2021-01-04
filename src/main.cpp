@@ -1,8 +1,4 @@
-
-
-
 #include <core/configuration/ConfigurationValue.hpp>
-
 #include <core/PMSVSettings.hpp>
 #include <communication/communicationboundary/NRF24Configuration.hpp>
 #include <movement/motorboundary/AccelStepperConfig.hpp>
@@ -15,6 +11,8 @@
 #include <communication/commandcontroller/CommandController_Action.hpp>
 #include <core/communication/CommunicationController.hpp>
 
+#include <core/util/ArraySize.hpp>
+
 #include <utility>
 
 #define R_SENSE 0.11f
@@ -22,12 +20,14 @@
 
 //##################################################################   Configuration ###################################
 PMSVSettings default_settings{
-        0,
+        0xE4,
         1.434684f,
         1.4545f,
         0,
         180
 };
+
+auto c_robot_id = registerConfig("ROBOT_ID", default_settings.robot_id);
 
 auto c_rot_per_mm = registerConfig("MOTOR_ROTATION_PER_MM_DISTANCE",
                                    default_settings.motor_rotation_degrees_per_mm_distance);
@@ -94,6 +94,7 @@ auto c_RIGHTmotor_forward_direction = registerConfig("RIGHTMOTOR_FORWARD_DIRECTI
 
 
 std::reference_wrapper<BaseConfigurationValue> configurationValues[]{
+        c_robot_id,
         c_rot_per_mm,
         c_mm_per_rot,
         c_min_speed,
@@ -129,9 +130,9 @@ void setup() {
     Serial.begin(9600);
 
     //    Set up Boundaries
-    CommandController_Configuration flashCommandController{configurationValues, 23};
+    CommandController_Configuration flashCommandController{configurationValues, lengthof(configurationValues)};
 
-    NRF24CommunicationBoundary nrfBoundary{nrf_config};
+    NRF24CommunicationBoundary nrfBoundary{nrf_config, default_settings};
 
     MotorBoundary_AccelStepper leftMotor{leftMotorConfig};
 
@@ -153,8 +154,7 @@ void setup() {
     };
 
 
-    CommunicationController communicationController{nrfBoundary, commandControllers, 4};
-    Serial.println("Init done");
+    CommunicationController communicationController{nrfBoundary, commandControllers, lengthof(commandControllers)};
     volatile bool _true = true;
     while (_true) {
         movementController.update();

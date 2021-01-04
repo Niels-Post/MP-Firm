@@ -37,13 +37,11 @@ void BaseConfigurationValue::print_info() {
 }
 
 void BaseConfigurationValue::store() {
-    Serial.println("storing");
     auto data = get();
     storage.write(ADDRESS_START, (uint8_t *) data.first, data.second);
 }
 
 void BaseConfigurationValue::load() {
-    Serial.println("loading");
 
     uint8_t *flash_data = storage.readAddress(ADDRESS_START);
     set(flash_data);

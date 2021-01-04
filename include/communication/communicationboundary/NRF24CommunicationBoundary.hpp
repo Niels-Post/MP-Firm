@@ -3,8 +3,7 @@
 #include <communication/communicationboundary/NRF24Configuration.hpp>
 
 #include <core/communication/BaseCommunicationBoundary.hpp>
-
-
+#include <core/PMSVSettings.hpp>
 
 
 /**
@@ -16,6 +15,8 @@
 class NRF24CommunicationBoundary : public BaseCommunicationBoundary {
     /// Configuration of the NRF Boundary
     NRFConfiguration &config;
+
+    PMSVSettings &settings;
 
     /// The radio used to communicate with the other party
     RF24 nrfRadio;
@@ -29,7 +30,7 @@ public:
      *
      * @param _config Configuration to set up
      */
-    NRF24CommunicationBoundary(NRFConfiguration &_config);
+    NRF24CommunicationBoundary(NRFConfiguration &_config, PMSVSettings &settings);
 
     /**
      * Send a message over RF to the controller
