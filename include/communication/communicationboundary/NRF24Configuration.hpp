@@ -18,8 +18,6 @@ struct NRFConfiguration {
     bool enable_dynamic_payload_length;
     /// Static payload length (currently unneeded since static payload is unsupported)
     uint8_t payload_size;
-    /// Have the NRF module automatically acknowledge incoming messages (needs to match the controller's setting)
-    bool enable_autoack;
     /// CE pin the NRF is connected to
     uint8_t pin_ce;
     /// CSN pin the NRF is connected to

@@ -21,7 +21,7 @@
 ////##################################################################   Configuration ###################################
 PMSVSettings default_settings{
         0,
-        1.434684f,
+        1.9f,
         1.4545f,
         0,
         180
@@ -38,19 +38,17 @@ auto c_max_speed = registerConfig("MAX_SPEED", default_settings.max_speed);
 
 NRFConfiguration nrf_config{
         RF24_PA_MAX,
-        50,
-        0xE0E0F1F1E4LL,
-        0xE0E0F1F1E4LL,
+        0x10,
+        0xE0E0F1F1FFLL,
+        0xE0E0F1F1FFLL,
         true,
         32,
-        true,
         5,
         4
 };
 
 auto c_nrf_channel = registerConfig("NRF_CHANNEL", nrf_config.channel);
 auto c_nrf_dynamicpayload = registerConfig("NRF_ENABLE_DYNAMICPAYLOAD", nrf_config.enable_dynamic_payload_length);
-auto c_nrf_autoack = registerConfig("NRF_ENABLE_AUTOACK", nrf_config.enable_autoack);
 auto c_nrf_pin_ce = registerConfig("NRF_PIN_CE", nrf_config.pin_ce);
 auto c_nrf_pin_csn = registerConfig("NRF_PIN_CSN", nrf_config.pin_csn);
 
@@ -112,7 +110,6 @@ std::reference_wrapper<BaseConfigurationValue> configurationValues[]{
         c_max_speed,
         c_nrf_channel,
         c_nrf_dynamicpayload,
-        c_nrf_autoack,
         c_nrf_pin_ce,
         c_nrf_pin_csn,
         c_leftmotor_pin_ms1,
@@ -182,5 +179,5 @@ void setup() {
 
 void loop() {
 }
-//
-//
+
+

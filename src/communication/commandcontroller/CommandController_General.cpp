@@ -10,11 +10,14 @@ Response CommandController_General::handle(const Command &cmd, ResponseCallback 
             break;
         case SET_ID:
             if(pmsvSettings.robot_id != 0) {
+                if(pmsvSettings.robot_id == cmd.parameters[0]) {
+                    return {cmd.message_id, SuccessCode::ID_ALREADY_SET, 0, nullptr, true};
+                }
                 return {cmd.message_id, SuccessCode::NO_RESPONSE};
             }
             pmsvSettings.robot_id = cmd.parameters[0];
             configRobotId.store();
-            Response res{cmd.message_id, SuccessCode::SUCCESS};
+            Response res{cmd.message_id, SuccessCode::SUCCESS, 0, nullptr, true};
             callback(res);
             rstc_start_software_reset(RSTC);
     }
