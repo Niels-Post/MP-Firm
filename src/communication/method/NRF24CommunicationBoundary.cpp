@@ -54,14 +54,16 @@ bool NRF24CommunicationBoundary::sendMessage(const Response &message) {
         nrfRadio.setAutoAck(0, true);
     }
 
-    bool sendStatus = nrfRadio.write(&message, message.size());
+    uint8_t data[message.size()];
+    message.write_bytes(data);
+
+    bool sendStatus = nrfRadio.write(data, message.size());
 
     if(!message.broadcast) {
         nrfRadio.setAutoAck(0, false);
     }
 
     nrfRadio.startListening();
-    Serial.println(sendStatus);
 
     return sendStatus;
 }

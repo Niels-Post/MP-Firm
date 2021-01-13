@@ -18,10 +18,11 @@
 
 #include <utility>
 
+
 ////##################################################################   Configuration ###################################
 PMSVSettings default_settings{
         0,
-        1.9f,
+        1.434684f,
         1.4545f,
         0,
         180
@@ -136,6 +137,8 @@ std::reference_wrapper<BaseConfigurationValue> configurationValues[]{
 
 void setup() {
     Serial.begin(9600);
+
+    Serial.println("SWEK");
 
 //        Set up Boundaries
     CommandController_Configuration flashCommandController{configurationValues, lengthof(configurationValues)};

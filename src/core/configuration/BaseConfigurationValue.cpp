@@ -47,4 +47,6 @@ void BaseConfigurationValue::load() {
     set(flash_data);
 }
 
-
+const char *BaseConfigurationValue::get_name() {
+    return CONFIG_NAME;
+}

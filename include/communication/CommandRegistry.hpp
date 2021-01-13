@@ -41,11 +41,12 @@ enum MeasurementCommand {
 /**
  * Commands in the "Flash" category
  */
-enum FlashCommand {
+enum ConfigurationCommand {
     SET_VALUE,
     GET_VALUE,
-    GET_TYPE,
     LOAD,
     STORE,
-    PRINT_ALL
+    PRINT_ALL,
+    GET_INFO,
+    GET_CONFIGURATION_COUNT,
 };

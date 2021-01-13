@@ -84,4 +84,9 @@ public:
      * Load the value from flash
      */
     void load();
+
+    /**
+     * Get the name of the configuration parameter
+     */
+     const char * get_name();
 };

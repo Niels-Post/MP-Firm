@@ -1,6 +1,5 @@
 #pragma once
-#include <Arduino.h>
-
+#include <core/util/ArduinoSafe.hpp>
 
 #include <OneBitDisplay.h>
 #include <core/PMSVSettings.hpp>
