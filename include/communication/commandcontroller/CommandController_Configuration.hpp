@@ -14,10 +14,9 @@
  */
 class CommandController_Configuration : public BaseCommandController {
     std::reference_wrapper<BaseConfigurationValue> *configurationValues;
-    size_t configuration_value_count ;
+    size_t configuration_value_count;
 
 public:
-
 
 
     /**
@@ -27,12 +26,18 @@ public:
      */
     Response handle(const Command &cmd, ResponseCallback callback) override;
 
+    /**
+     * \copydoc BaseCommandController::getCategoryID()
+     */
     uint8_t getCategoryID() override;
 
-	CommandController_Configuration(std::reference_wrapper<BaseConfigurationValue> *configurationValues,
+    CommandController_Configuration(std::reference_wrapper<BaseConfigurationValue> *configurationValues,
                                     size_t configurationValueCount);
 
-	std::pair<uint8_t, uint8_t> getParameterLimits(uint8_t command_id) override;
+    /**
+     * \copydoc BaseCommandController::getParameterLimits(uint8_t)
+     */
+    std::pair<uint8_t, uint8_t> getParameterLimits(uint8_t command_id) override;
 
 };
 

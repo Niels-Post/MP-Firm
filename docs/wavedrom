@@ -1,0 +1,66 @@
+Default
+{signal: [
+  {name: 'byte', wave: 'x2.2.2.2.2.2.2.x', data: ['1', '2', '3', '4', '5', '6', '7', '8']},
+  {name: 'data', wave: 'x2.', data: ['id']},
+]}
+
+
+
+
+SET_ID
+{signal: [
+  {name: 'byte', wave: 'x2.x', data: ['1', '2', '3', '4', '5', '6', '7', '8']},
+  {name: 'data', wave: 'x3.x', data: ['id']},
+  {name: 'type', wave: 'x9.x', data: ['uint8']}
+]}
+
+
+
+START_MOVE_MM
+
+{signal: [
+  {name: 'byte', wave: 'x2.2.2.x', data: ['1', '2', '3', '4', '5', '6', '7', '8']},
+  {name: 'data', wave: 'x3...4.x', data: ['mm', 'direction']},
+  {name: 'type', wave: 'x9...9.x', data: ['uint16', 'bool']}
+]}
+
+START_ROTATE_DEGREES
+
+{signal: [
+  {name: 'byte', wave: 'x2.2.2.x', data: ['1', '2', '3', '4', '5', '6', '7', '8']},
+  {name: 'data', wave: 'x3...4.x', data: ['degrees', 'direction']},
+  {name: 'type', wave: 'x9...9.x', data: ['uint16', 'bool']}
+]}
+
+SET_VALUE
+
+{signal: [
+  {name: 'byte', wave: 'x2.2.|x', data: ['1', '2', '3', '4', '5', '6', '7', '8']},
+  {name: 'data', wave: 'x3.4.|x', data: ['config_id', 'data']},
+  {name: 'type', wave: 'x9.9..x', data: ['uint8', '?']}
+]}
+
+GET_VALUE
+{signal: [
+  {name: 'byte', wave: 'x2.x', data: ['1', '2', '3', '4', '5', '6', '7', '8']},
+  {name: 'data', wave: 'x3.x', data: ['id']},
+  {name: 'type', wave: 'x9.x', data: ['uint8']}
+]}
+
+GET_INFO
+{signal: [
+  {name: 'byte', wave: 'x2.x', data: ['1', '2', '3', '4', '5', '6', '7', '8']},
+  {name: 'data', wave: 'x3.x', data: ['id']},
+  {name: 'type', wave: 'x9.x', data: ['uint8']}
+]}
+
+GET_INFO_RET
+{signal: [
+  {name: 'byte', wave: 'x2.2.2.x', data: ['1', '2', '3', '4', '5', '6', '7', '8']},
+  {name: 'data', wave: 'x3.4..|x', data: ['id', 'name']},
+  {name: 'type', wave: 'x9.9..|x', data: ['uint8', 'uint8[]']}
+]}
+
+
+
+

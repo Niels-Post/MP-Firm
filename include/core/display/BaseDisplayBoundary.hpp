@@ -1,7 +1,10 @@
 #pragma once
 #include <cstdint>
-class BaseDisplayBoundary {
 
+/**
+ * Boundary class for a text display.
+ */
+class BaseDisplayBoundary {
 public:
     /**
      * SetCursor should set the write cursor to the specified position (in characters)
@@ -10,6 +13,9 @@ public:
      */
     virtual void setCursor(uint8_t x, uint8_t y) = 0;
 
+    /**
+     * Change the cursor to the start of the screen
+     */
     void resetCursor() {
         setCursor(0,0);
     }

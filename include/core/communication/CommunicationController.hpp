@@ -19,6 +19,7 @@
  */
 class CommunicationController {
 private:
+    /// The max amount of commands the robot queues before they new commands are dropped
     static size_t const MAX_QUEUE_LENGTH = 20;
     /// CommunicationBoundary to send and receive commands through
     BaseCommunicationBoundary &communicationBoundary;

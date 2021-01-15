@@ -14,9 +14,9 @@ class MovementController {
     /// Reference to the settings object to use to convert values
     const PMSVSettings &settings;
 
-    ///
+    /// Is there a callback currently registered
     bool isCallbackEnabled = false;
-    ///
+    /// Current callback to call when an action ends
     ResponseCallback current_callback;
 
 

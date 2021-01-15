@@ -48,16 +48,34 @@ public:
 private:
 
 public:
+    /**
+     * Get the type character of the value
+     * may return:
+     * f: 4 Byte float
+     * i: 4 byte integer
+     * c: 1 byte unsigned integer
+     * b: 1 bit boolean
+     * @return
+     */
 	char getType() override {
 		return _type.letter;
 	}
 
 private:
 
+    /**
+     * Change the value of the configurationvalue
+     * @param origin Address to read the value from
+     */
 	void set(void *origin) override {
 		value = *((T *) origin);
 	}
 
+	/**
+	 * Get the value of the configurationvalue
+	 *
+	 * @return A pair of a pointer to the value's address and the size of the value
+	 */
 	std::pair<void *, uint8_t> get() override {
 		return {&value, sizeof(T)};
 	}

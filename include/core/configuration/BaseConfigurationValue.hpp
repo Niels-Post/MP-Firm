@@ -7,9 +7,13 @@
 
 class BaseConfigurationValue {
 protected:
+    /// Name of the configuration value
     const char* CONFIG_NAME;
+    /// ID, used by configuration commands
     uint8_t CONFIG_ID = 0;
+    /// ROM address to store the variable at, only used internally
     uint8_t ADDRESS_START = 0;
+    /// Instance of DueFlashStorage to use while writing
     static DueFlashStorage storage;
 
 

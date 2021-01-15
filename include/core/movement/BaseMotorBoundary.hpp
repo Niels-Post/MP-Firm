@@ -48,6 +48,4 @@ public:
      */
     virtual void setMaxSpeed(float max_speed_degrees_per_s) = 0;
 
-    // TODO figure out what to do with this
-    virtual void setMinSpeed() = 0;
 };

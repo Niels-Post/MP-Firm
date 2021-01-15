@@ -59,6 +59,5 @@ public:
      */
     void setMaxSpeed(float max_degrees_per_second) override;
 
-    void setMinSpeed() override;
 
 };

@@ -19,10 +19,16 @@ public:
      */
     Response handle(const Command &cmd, ResponseCallback callback) override;
 
+    /**
+     * \copydoc BaseCommandController::getCategoryID()
+     */
     uint8_t getCategoryID() override;
 
     CommandController_General(PMSVSettings &settings, ConfigurationValue<uint8_t> &robotIdConfig);
 
+    /**
+     * \copydoc BaseCommandController::getParameterLimits(uint8_t)
+     */
     std::pair<uint8_t, uint8_t> getParameterLimits(uint8_t command_id) override;
 
 };

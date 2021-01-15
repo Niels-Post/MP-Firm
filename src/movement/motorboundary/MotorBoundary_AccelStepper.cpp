@@ -49,6 +49,4 @@ void MotorBoundary_AccelStepper::setMaxSpeed(float max_degrees_per_second) {
     stepper.setAcceleration(max_degrees_per_second * config.steps_per_degree);
 }
 
-void MotorBoundary_AccelStepper::setMinSpeed() {
 
-}

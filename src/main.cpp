@@ -138,10 +138,8 @@ std::reference_wrapper<BaseConfigurationValue> configurationValues[]{
 void setup() {
     Serial.begin(9600);
 
-    Serial.println("SWEK");
-
 //        Set up Boundaries
-    CommandController_Configuration flashCommandController{configurationValues, lengthof(configurationValues)};
+    CommandController_Configuration configurationCommandController{configurationValues, lengthof(configurationValues)};
 
     NRF24CommunicationBoundary nrfBoundary{nrf_config, default_settings};
 
@@ -165,7 +163,7 @@ void setup() {
             generalCommandHandler,
             actionCommandHandler,
             measurementCommandHandler,
-            flashCommandController
+            configurationCommandController
     };
 
 
